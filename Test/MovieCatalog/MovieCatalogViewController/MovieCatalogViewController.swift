@@ -1,0 +1,124 @@
+//
+//  ViewController.swift
+//  Test
+//
+//  Created by Muhammad Zahid Imran on 4/21/19.
+//  Copyright © 2019 24. All rights reserved.
+//
+
+import UIKit
+import Observable
+
+class MovieCatalogViewController: UIViewController {
+    
+    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var errorView: UIView!
+    @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var loadingFooter: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var pageRetryButton: UIButton!
+    let model = MovieCatalogVM()
+    var disposal:Disposal = Disposal()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        addObserver()
+        loadData()
+    }
+    
+    func loadData() -> Void {
+        model.load()
+    }
+    
+    func addObserver() -> Void {
+        model.movies.observe {[weak self] (value, _ ) in
+            self?.tableView.reloadData()
+        }.add(to: &disposal)
+        
+        model.currentRequest.observe {[weak self] (value, nil) in
+            if let _ = value {
+                self?.view.showLinearHud(Double(self?.view.layoutMargins.top ?? 0))
+            }
+            else {
+                self?.view.hideLinearHud()
+            }
+        }.add(to: &disposal)
+        
+        model.error.observe {[weak self] (value, nil) in
+            self?.showError(error: value)
+            }.add(to: &disposal)
+    }
+    
+    func showError(error: Error?) -> Void {
+        if model.movies.value.count == 0 {
+            if let err = error {
+                self.errorLabel.text = err.localizedDescription
+                self.view.bringSubviewToFront(self.errorView)
+            }
+            else {
+                self.errorLabel.text = ""
+                self.view.sendSubviewToBack(self.errorView)
+            }
+        }
+        else {
+            self.pageRetryButton.isHidden = error == nil
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let movieDetailVC = segue.destination as? MovieDetailViewController {
+            movieDetailVC.movieID = model.movies.value[tableView.indexPathForSelectedRow?.row ?? 0].id
+        }
+    }
+    
+    @IBAction func retryAction(_ sender: Any) {
+        loadData()
+    }
+    
+    @IBAction func pageRetryAction(_ sender: Any) {
+        model.loadNextPage()
+    }
+}
+
+extension MovieCatalogViewController : UITableViewDelegate, UITableViewDataSource
+{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return model.movies.value.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MovieCatalogCell.self)) as! MovieCatalogCell
+        cell.movie = model.movies.value[indexPath.row]
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == model.movies.value.count - 1{
+            if model.isNextPageAvailable, !model.isSearching {
+                self.loadingFooter.isHidden = false
+                model.loadNextPage()
+            }
+            else {
+                self.loadingFooter.isHidden = true
+            }
+        }
+    }
+    
+    
+    
+}
+
+extension MovieCatalogViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        model.filter = searchText
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
+    {
+        searchBar.endEditing(true)
+    }
+    
+}
+
