@@ -12,8 +12,10 @@ import Observable
 
 class MovieDetailVM {
     
-    private var _videos:Observable<[Video]> = Observable<[Video]>([])
-    lazy var videos: ImmutableObservable<[Video]> = _videos
+    let repository: MovieRepositoryProtocol
+    
+    private var _videos:Observable<[VideoModelProtocol]> = Observable<[VideoModelProtocol]>([])
+    lazy var videos: ImmutableObservable<[VideoModelProtocol]> = _videos
     
     private var _errorVideos:Observable<Error?> = Observable<Error?>(nil)
     lazy var errorVideos: ImmutableObservable<Error?> = _errorVideos
@@ -71,14 +73,18 @@ class MovieDetailVM {
             guard let url = movie.value?.backdrop_path else {
                 return nil
             }
-            return URL(string: Resolver.constants.IMAGE_REPO_BASE_URL + url)
+            return URL(string: AppConstants.shared.IMAGE_REPO_BASE_URL + url)
         }
+    }
+    
+    init(repository: MovieRepositoryProtocol = RemoteMovieRepository()) {
+        self.repository = repository
     }
     
     func load(movieID:Int) -> Void {
         self._error.value = nil
         if _currentRequest.value == nil {
-            self._currentRequest.value = Resolver.movieRepository.getMovie(id: movieID) {[weak self] (result, error) in
+            self._currentRequest.value = repository.getMovie(id: movieID) {[weak self] (result, error) in
                 if let result = result {
                     self?._movie.value = result
                 }
@@ -92,7 +98,7 @@ class MovieDetailVM {
     
     
     func loadVideos(movieID:Int) -> Void {
-        let _ = Resolver.movieRepository.getVideos(id: movieID) {[weak self] (result, error) in
+        let _ = repository.getVideos(id: movieID) {[weak self] (result, error) in
             if let result = result {
                 self?._videos.value = result.results
             }

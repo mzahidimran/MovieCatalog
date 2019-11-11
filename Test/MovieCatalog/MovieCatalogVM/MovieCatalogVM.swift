@@ -13,6 +13,8 @@ import AlamofireImage
 
 class MovieCatalogVM {
     
+    let repository: MovieRepositoryProtocol
+    
     private var page: Int = 0
     private var total_results: Int = 0
     private var total_pages: Int = 0
@@ -53,6 +55,10 @@ class MovieCatalogVM {
     private var _currentRequest: Observable<NetworkRequest?> = Observable<NetworkRequest?>(nil)
     lazy var currentRequest: ImmutableObservable<NetworkRequest?> = _currentRequest
     
+    init(repository: MovieRepositoryProtocol = RemoteMovieRepository()) {
+        self.repository = repository
+    }
+    
     func loadNextPage() -> Void {
         if isSearching { return }
         load(page: page+1)
@@ -62,7 +68,7 @@ class MovieCatalogVM {
         
         self._error.value = nil
         if _currentRequest.value == nil {
-            self._currentRequest.value = Resolver.movieRepository.getPopular(page: page) {[weak self] (result, error) in
+            self._currentRequest.value = repository.getPopular(page: page) {[weak self] (result, error) in
                 if let result = result {
                     self?.throttleImages(movies: result.results)
                     self?.source.append(contentsOf: result.results)
@@ -81,7 +87,7 @@ class MovieCatalogVM {
     
     private func throttleImages(movies:[Movie]) {
         for movie in movies {
-            if let url = URL(string: Resolver.constants.IMAGE_REPO_BASE_URL + movie.backdrop_path)
+            if let url = URL(string: AppConstants.shared.IMAGE_REPO_BASE_URL + movie.backdrop_path)
             {
                 ImageDownloader.default.download(URLRequest(url: url), completion: nil)
             }

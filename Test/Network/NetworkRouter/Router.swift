@@ -10,7 +10,7 @@ import Foundation
 
 struct Router: URLRouter {
     static var basePath: String {
-        return Resolver.constants.BASE_URL
+        return AppConstants.shared.BASE_URL
     }
     
     struct popular: Readable {

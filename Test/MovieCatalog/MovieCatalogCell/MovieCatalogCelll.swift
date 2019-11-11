@@ -18,7 +18,7 @@ class MovieCatalogCell: UITableViewCell {
     var movie: Movie! {
         didSet {
             self.titleLabel.text = movie.title
-            self.bannerImageView.af_setImage(withURL: URL(string: Resolver.constants.IMAGE_REPO_BASE_URL + movie.backdrop_path)!, placeholderImage: #imageLiteral(resourceName: "placeholder"))
+            self.bannerImageView.af_setImage(withURL: URL(string: AppConstants.shared.IMAGE_REPO_BASE_URL + movie.backdrop_path)!, placeholderImage: #imageLiteral(resourceName: "placeholder"))
         }
     }
     

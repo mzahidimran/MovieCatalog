@@ -9,6 +9,12 @@
 import Foundation
 import ObjectMapper
 
+/**
+ 
+Generic pageable class takes generic param that confirms to **Mappable**
+
+*/
+
 struct Pageable<T: Mappable>: Mappable {
     
     init?(map: Map) { }

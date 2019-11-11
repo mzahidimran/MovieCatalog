@@ -12,6 +12,11 @@ import Observable
 import XCDYouTubeKit
 import AVKit
 
+extension Notification.Name {
+     static let peru = Notification.Name("peru")
+     static let argentina = Notification.Name("argentina")
+}
+
 class MovieDetailViewController: UIViewController {
     
     var movieID:Int!
@@ -145,10 +150,10 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
-    func proceedVideo(video: Video) -> Void {
+    func proceedVideo(video: VideoModelProtocol) -> Void {
         XCDYouTubeClient.default().getVideoWithIdentifier(video.key, completionHandler: {[weak self] video, error in
             if video != nil {
-                var streamURLs = video?.streamURLs
+                let streamURLs = video?.streamURLs
                 let streamURL = streamURLs?[XCDYouTubeVideoQuality.HD720.rawValue] ?? streamURLs?[XCDYouTubeVideoQuality.medium360.rawValue] ?? streamURLs?[XCDYouTubeVideoQuality.small240.rawValue]
                 
                 if let streamURL = streamURL {

@@ -9,6 +9,13 @@
 import Foundation
 import ObjectMapper
 
+
+/**
+ 
+Video list for movie DTO
+
+*/
+
 struct VideoResponse: Mappable {
     init?(map: Map) { }
     

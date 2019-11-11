@@ -18,7 +18,7 @@ DEPENDENCIES:
   - XCDYouTubeKit
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Alamofire
     - AlamofireImage
     - AlamofireObjectMapper
@@ -36,4 +36,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8664e2e0d9f7345e099dba0de59a97bffa08f9fc
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.8.3

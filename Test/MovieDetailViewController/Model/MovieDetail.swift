@@ -9,9 +9,11 @@
 import Foundation
 import ObjectMapper
 
+/**
+ 
+Video detail model confirms to Mappable
 
-fileprivate let dateFormatter = DateFormatter(withFormat: "yyyy-MM-dd", locale: "en_US")
-
+*/
 struct MovieDetail: Mappable {
     
     init?(map: Map) { }
@@ -30,7 +32,7 @@ struct MovieDetail: Mappable {
         backdrop_path <- map["backdrop_path"]
         adult <- map["adult"]
         overview <- map["overview"]
-        release_date <- (map["release_date"], DateFormatterTransform(dateFormatter: dateFormatter))
+        release_date <- (map["release_date"], DateFormatterTransform(dateFormatter: DateFormatter(withFormat: "yyyy-MM-dd", locale: "en_US")))
     }
     
     var vote_count: Int = 0
@@ -50,6 +52,12 @@ struct MovieDetail: Mappable {
 }
 
 
+
+/**
+ 
+Movie genre model confirms to Mappable
+
+*/
 struct Genre: Mappable {
     init?(map: Map) {}
     
