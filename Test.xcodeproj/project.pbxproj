@@ -90,6 +90,23 @@
 			path = "Remote Repository";
 			sourceTree = "<group>";
 		};
+		591E81002379F1DD00956A6E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				59C36B99226DE9250003D253 /* MovieDetailVM.swift */,
+				59F2A90E226CA53300EB39A8 /* MovieCatalogVM.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		591E81012379F23800956A6E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				59C36B8F226D4D5B0003D253 /* MovieCatalogCell */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		59C36B80226D317E0003D253 /* AppConstants */ = {
 			isa = PBXGroup;
 			children = (
@@ -124,13 +141,6 @@
 			path = Network;
 			sourceTree = "<group>";
 		};
-		59C36B8C226D40850003D253 /* Resolver */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Resolver;
-			sourceTree = "<group>";
-		};
 		59C36B8F226D4D5B0003D253 /* MovieCatalogCell */ = {
 			isa = PBXGroup;
 			children = (
@@ -150,28 +160,9 @@
 		59C36B95226DE7FC0003D253 /* MovieDetailViewController */ = {
 			isa = PBXGroup;
 			children = (
-				59C36B9B226DE9800003D253 /* Model */,
-				59C36B98226DE8F10003D253 /* MovieDetailVM */,
 				59C36B96226DE83B0003D253 /* MovieDetailViewController.swift */,
 			);
 			path = MovieDetailViewController;
-			sourceTree = "<group>";
-		};
-		59C36B98226DE8F10003D253 /* MovieDetailVM */ = {
-			isa = PBXGroup;
-			children = (
-				59C36B99226DE9250003D253 /* MovieDetailVM.swift */,
-			);
-			path = MovieDetailVM;
-			sourceTree = "<group>";
-		};
-		59C36B9B226DE9800003D253 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				59C36B9C226DE9920003D253 /* MovieDetail.swift */,
-				59C36B9E226E4FDA0003D253 /* Video.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 		59F2A8ED226CA40400EB39A8 = {
@@ -195,13 +186,13 @@
 		59F2A8F8226CA40400EB39A8 /* Test */ = {
 			isa = PBXGroup;
 			children = (
-				59C36B95226DE7FC0003D253 /* MovieDetailViewController */,
+				591E81012379F23800956A6E /* View */,
+				591E81002379F1DD00956A6E /* ViewModel */,
 				59C36B94226DE7ED0003D253 /* Util */,
-				59C36B8C226D40850003D253 /* Resolver */,
 				59C36B8B226D3ECB0003D253 /* Network */,
 				59C36B80226D317E0003D253 /* AppConstants */,
 				59F2A911226CAAE700EB39A8 /* Model */,
-				59F2A90B226CA4FD00EB39A8 /* MovieCatalog */,
+				59F2A90B226CA4FD00EB39A8 /* ViewController */,
 				59F2A8F9226CA40400EB39A8 /* AppDelegate.swift */,
 				59F2A8FD226CA40400EB39A8 /* Main.storyboard */,
 				59F2A900226CA40600EB39A8 /* Assets.xcassets */,
@@ -211,15 +202,13 @@
 			path = Test;
 			sourceTree = "<group>";
 		};
-		59F2A90B226CA4FD00EB39A8 /* MovieCatalog */ = {
+		59F2A90B226CA4FD00EB39A8 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				59C36B8F226D4D5B0003D253 /* MovieCatalogCell */,
-				59F2A910226CAADC00EB39A8 /* Model */,
-				59F2A90D226CA51800EB39A8 /* MovieCatalogVM */,
+				59C36B95226DE7FC0003D253 /* MovieDetailViewController */,
 				59F2A90C226CA51000EB39A8 /* MovieCatalogViewController */,
 			);
-			path = MovieCatalog;
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 		59F2A90C226CA51000EB39A8 /* MovieCatalogViewController */ = {
@@ -230,25 +219,12 @@
 			path = MovieCatalogViewController;
 			sourceTree = "<group>";
 		};
-		59F2A90D226CA51800EB39A8 /* MovieCatalogVM */ = {
-			isa = PBXGroup;
-			children = (
-				59F2A90E226CA53300EB39A8 /* MovieCatalogVM.swift */,
-			);
-			path = MovieCatalogVM;
-			sourceTree = "<group>";
-		};
-		59F2A910226CAADC00EB39A8 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				59F2A914226CACF100EB39A8 /* Movie.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		59F2A911226CAAE700EB39A8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				59C36B9C226DE9920003D253 /* MovieDetail.swift */,
+				59C36B9E226E4FDA0003D253 /* Video.swift */,
+				59F2A914226CACF100EB39A8 /* Movie.swift */,
 				59F2A912226CAAF900EB39A8 /* Pageable.swift */,
 				59C36BA0226E575B0003D253 /* VideoResponse.swift */,
 			);
