@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import ObjectMapper
 /**
  
 Remote movie repository subclassed from RemoteRepository confirms **MovieRepositoryProtocol**
@@ -21,12 +21,14 @@ class RemoteMovieRepository: RemoteRepository {
 
 extension RemoteMovieRepository : MovieRepositoryProtocol {
     
-    func getPopular(page: Int, completion: @escaping (Pageable<Movie>?, Error?) -> Void) -> NetworkRequest {
+    func getPopular<T>(page: Int, completion: @escaping (_ response: Pageable<T>?, _ error: Error?) -> Void) -> NetworkRequest where T: MovieModelProtocol, T: Mappable
+    {
         let query:[String : Any] = ["api_key" : AppConstants.shared.MOVIE_DB_API_KEY, "page":page]
         return self.request(requestConverter: Router.popular.get(params: "", query: query), completion: completion)
     }
     
-    func getMovie(id: Int, completion: @escaping (MovieDetail?, Error?) -> Void) -> NetworkRequest {
+    func getMovie<T>(id: Int, completion: @escaping (_ response: T?, _ error: Error?) -> Void) -> NetworkRequest  where T: MovieModelProtocol, T: Mappable
+    {
         let query:[String : Any] = ["api_key" : AppConstants.shared.MOVIE_DB_API_KEY]
         return self.request(requestConverter: Router.movie.get(params: "\(id)", query: query), completion: completion)
     }

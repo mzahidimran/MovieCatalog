@@ -21,7 +21,7 @@ class MovieDetailViewController: UIViewController {
     
     var movieID:Int!
     var disposal:Disposal = Disposal()
-    let model = MovieDetailVM()
+    let model: MovieVMProtocol = MovieVM()
     weak var playerViewController:AVPlayerViewController?
     
     
@@ -63,26 +63,38 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
-    func populateData() -> Void {
-        self.titleLabel.text = model.title
-        if let bannerURL = model.bannerURl
-        {
-            self.bannerImageView.af_setImage(withURL: bannerURL, placeholderImage: #imageLiteral(resourceName: "placeholder"))
-        }
-        self.overviewLabel.text = model.overview
-        self.releaseDateLabel.text = self.model.releaseDate
-        self.genreLabel.text = self.model.genre
-    }
-    
-    
     func addObserver() -> Void {
-        model.movie.observe {[weak self] (value, _ ) in
-            guard let _ = value else {
-                self?.scrollView.isHidden = true
-                return
+        
+        model.title.observe { (newValue, oldValue) in
+            self.titleLabel.text = newValue
+        }.add(to: &disposal)
+        
+        model.bannerURl.observe { (newValue, oldValue) in
+            if let bannerURL = newValue
+            {
+                self.bannerImageView.af_setImage(withURL: bannerURL, placeholderImage: #imageLiteral(resourceName: "placeholder"))
             }
-            self?.populateData()
-            self?.scrollView.isHidden = false
+        }.add(to: &disposal)
+        
+        model.overview.observe { (newValue, oldValue) in
+            self.overviewLabel.text = newValue
+        }.add(to: &disposal)
+        
+        model.releaseDate.observe { (newValue, oldValue) in
+            self.releaseDateLabel.text = newValue
+        }.add(to: &disposal)
+        
+        model.genre.observe { (newValue, oldValue) in
+            self.genreLabel.text = newValue
+        }.add(to: &disposal)
+        
+        model.hasDataUpdates.observe {[weak self] (value, _ ) in
+            if value == false {
+                self?.scrollView.isHidden = true
+            }
+            else {
+                self?.scrollView.isHidden = false
+            }
             }.add(to: &disposal)
         
         model.currentRequest.observe {[weak self] (value, nil) in

@@ -17,8 +17,8 @@ class MovieCatalogViewController: UIViewController {
     @IBOutlet weak var loadingFooter: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var pageRetryButton: UIButton!
-    let model = MovieCatalogVM()
-    var disposal:Disposal = Disposal()
+    var model: MovieCatalogVMProtocol = MovieCatalogVM()
+    var disposal: Disposal = Disposal()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,12 +28,15 @@ class MovieCatalogViewController: UIViewController {
     }
     
     func loadData() -> Void {
-        model.load()
+        model.load(page:1)
     }
     
     func addObserver() -> Void {
-        model.movies.observe {[weak self] (value, _ ) in
-            self?.tableView.reloadData()
+        
+        model.moviesUpdated.observe {[weak self] (value, _ ) in
+            DispatchQueue.main.async {
+                self?.tableView.reloadData()
+            }
         }.add(to: &disposal)
         
         model.currentRequest.observe {[weak self] (value, nil) in
@@ -51,7 +54,7 @@ class MovieCatalogViewController: UIViewController {
     }
     
     func showError(error: Error?) -> Void {
-        if model.movies.value.count == 0 {
+        if model.moviesCount == 0 {
             if let err = error {
                 self.errorLabel.text = err.localizedDescription
                 self.view.bringSubviewToFront(self.errorView)
@@ -68,7 +71,7 @@ class MovieCatalogViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let movieDetailVC = segue.destination as? MovieDetailViewController {
-            movieDetailVC.movieID = model.movies.value[tableView.indexPathForSelectedRow?.row ?? 0].id
+            movieDetailVC.movieID = model.movie(at: tableView.indexPathForSelectedRow?.row ?? 0).id.value
         }
     }
     
@@ -84,24 +87,27 @@ class MovieCatalogViewController: UIViewController {
 extension MovieCatalogViewController : UITableViewDelegate, UITableViewDataSource
 {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return model.movies.value.count
+        return model.moviesCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MovieCatalogCell.self)) as! MovieCatalogCell
-        cell.movie = model.movies.value[indexPath.row]
+        cell.movieVM = model.movie(at: indexPath.row)
         return cell
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == model.movies.value.count - 1{
-            if model.isNextPageAvailable, !model.isSearching {
+        if !model.isSearching, indexPath.row == model.moviesCount - 1{
+            if model.isNextPageAvailable  {
                 self.loadingFooter.isHidden = false
                 model.loadNextPage()
             }
             else {
                 self.loadingFooter.isHidden = true
             }
+        }
+        else {
+            self.loadingFooter.isHidden = true
         }
     }
     

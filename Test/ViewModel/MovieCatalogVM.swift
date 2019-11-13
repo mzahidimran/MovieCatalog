@@ -11,10 +11,78 @@ import Foundation
 import Observable
 import AlamofireImage
 
-class MovieCatalogVM {
+
+protocol MovieCatalogVMProtocol {
     
-    let repository: MovieRepositoryProtocol
+    /**
+        VM is searching for string in MovieDB
+    */
     
+    var isSearching: Bool { get }
+    
+    /**
+    Movie list next page available
+    */
+    
+    var isNextPageAvailable:Bool { get }
+    
+    /**
+    Filter movie list
+    */
+    
+    var filter: String { get set }
+    
+    /**
+        Movie data count
+    */
+    
+    var moviesCount: Int { get }
+    
+    /**
+        Movie VM at index
+    */
+    
+    func movie(at index:Int) -> MovieVMProtocol
+    
+    /**
+    Have data list updates dynamic, listen to this for updates
+    */
+    
+    var moviesUpdated: ImmutableObservable<Bool> { get }
+    
+    /**
+    Updates on error loading
+    */
+    
+    var error: ImmutableObservable<Error?> { get }
+    
+    /**
+    Updates on every new network request
+    */
+    
+    var currentRequest: ImmutableObservable<NetworkRequest?> { get }
+    
+    /**
+    Get videos list for page
+
+    - Parameter page: Movie ID to fetch videos
+
+    */
+    
+    func load(page:Int) -> Void
+    
+    /**
+    Load next page 
+
+    */
+    
+    func loadNextPage() -> Void
+}
+
+
+class MovieCatalogVM: MovieCatalogVMProtocol {
+    
+    private let repository: MovieRepositoryProtocol
     private var page: Int = 0
     private var total_results: Int = 0
     private var total_pages: Int = 0
@@ -38,15 +106,26 @@ class MovieCatalogVM {
         }
     }
     
+    var moviesCount: Int {
+        return movies.count
+    }
+    
     private var source:[Movie] = [] {
         didSet {
             if filter.count == 0 {
-                _movies.value = source
+                movies = source
             }
         }
     }
-    private var _movies:Observable<[Movie]> = Observable<[Movie]>([])
-    lazy var movies: ImmutableObservable<[Movie]> = _movies
+    
+    private var movies:[Movie] = [] {
+        didSet {
+            _moviesUpdated.value = true
+        }
+    }
+    
+    private var _moviesUpdated:Observable<Bool> = Observable<Bool>(false)
+    lazy var moviesUpdated: ImmutableObservable<Bool> = _moviesUpdated
     
     private var _error:Observable<Error?> = Observable<Error?>(nil)
     lazy var error: ImmutableObservable<Error?> = _error
@@ -64,11 +143,15 @@ class MovieCatalogVM {
         load(page: page+1)
     }
     
-    func load(page:Int = 1) -> Void {
+    func movie(at index: Int) -> MovieVMProtocol  {
+        return MovieVM(movie: movies[index])
+    }
+    
+    func load(page:Int) -> Void {
         
         self._error.value = nil
         if _currentRequest.value == nil {
-            self._currentRequest.value = repository.getPopular(page: page) {[weak self] (result, error) in
+            self._currentRequest.value = repository.getPopular(page: page) {[weak self] (result:Pageable<Movie>?, error) in
                 if let result = result {
                     self?.throttleImages(movies: result.results)
                     self?.source.append(contentsOf: result.results)
@@ -97,10 +180,10 @@ class MovieCatalogVM {
     private func applyFilter(){
         if isSearching
         {
-            self._movies.value = self.source.filter { $0.title.localizedCaseInsensitiveContains(filter) }
+            self.movies = self.source.filter { $0.title.localizedCaseInsensitiveContains(filter) }
         }
         else {
-            self._movies.value = self.source
+            self.movies = self.source
         }
     }
     

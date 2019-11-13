@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import ObjectMapper
 
 typealias NetworkRequest = DataRequest
 
@@ -30,14 +31,14 @@ protocol MovieRepositoryProtocol: RepositoryProtocol {
 
     - Parameter completion: Completion block
     
-    - Parameter response: Pageable movie object returned on API success
+    - Parameter response: Pageable **MovieModelProtocol** object returned on API success
      
     - Parameter error: Error on API failure
 
     - Returns: New network request refrence.
     */
     
-    func getPopular(page: Int, completion: @escaping (_ response: Pageable<Movie>?, _ error: Error?) -> Void) -> NetworkRequest
+    func getPopular<T>(page: Int, completion: @escaping (_ response: Pageable<T>?, _ error: Error?) -> Void) -> NetworkRequest where T: MovieModelProtocol, T: Mappable
     
     /**
     Get movie detail for movie ID.
@@ -46,14 +47,14 @@ protocol MovieRepositoryProtocol: RepositoryProtocol {
 
     - Parameter completion: Completion block
     
-    - Parameter response: Movie detail returned on API success
+    - Parameter response: **MovieModelProtocol** detail returned on API success
      
     - Parameter error: Error on API failure
 
     - Returns: New network request refrence.
     */
     
-    func getMovie(id: Int, completion: @escaping (_ response: MovieDetail?, _ error: Error?) -> Void) -> NetworkRequest
+    func getMovie<T>(id: Int, completion: @escaping (_ response: T?, _ error: Error?) -> Void) -> NetworkRequest  where T: MovieModelProtocol, T: Mappable
     
     /**
     Get videos list available for movie ID.
