@@ -12,6 +12,7 @@
 		593CD4EC237C847A008E29A1 /* TestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593CD4EB237C847A008E29A1 /* TestTests.swift */; };
 		593CD4F4237C84A5008E29A1 /* MovieCatalogVMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593CD4F3237C84A5008E29A1 /* MovieCatalogVMTests.swift */; };
 		593CD4F6237C858B008E29A1 /* MockMovieRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593CD4F5237C858B008E29A1 /* MockMovieRepository.swift */; };
+		59624C5F2380DC26005D04A9 /* MovieVMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59624C5E2380DC26005D04A9 /* MovieVMTests.swift */; };
 		59C36B82226D31940003D253 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C36B81226D31940003D253 /* AppConstants.swift */; };
 		59C36B85226D33B80003D253 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C36B83226D33B80003D253 /* Router.swift */; };
 		59C36B86226D33B80003D253 /* RoutersProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C36B84226D33B80003D253 /* RoutersProtocol.swift */; };
@@ -53,6 +54,7 @@
 		593CD4ED237C847A008E29A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		593CD4F3237C84A5008E29A1 /* MovieCatalogVMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCatalogVMTests.swift; sourceTree = "<group>"; };
 		593CD4F5237C858B008E29A1 /* MockMovieRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMovieRepository.swift; sourceTree = "<group>"; };
+		59624C5E2380DC26005D04A9 /* MovieVMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieVMTests.swift; sourceTree = "<group>"; };
 		59C36B81226D31940003D253 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		59C36B83226D33B80003D253 /* Router.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		59C36B84226D33B80003D253 /* RoutersProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutersProtocol.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				593CD4ED237C847A008E29A1 /* Info.plist */,
 				593CD4F3237C84A5008E29A1 /* MovieCatalogVMTests.swift */,
 				593CD4F5237C858B008E29A1 /* MockMovieRepository.swift */,
+				59624C5E2380DC26005D04A9 /* MovieVMTests.swift */,
 			);
 			path = TestTests;
 			sourceTree = "<group>";
@@ -458,6 +461,7 @@
 				593CD4F6237C858B008E29A1 /* MockMovieRepository.swift in Sources */,
 				593CD4EC237C847A008E29A1 /* TestTests.swift in Sources */,
 				593CD4F4237C84A5008E29A1 /* MovieCatalogVMTests.swift in Sources */,
+				59624C5F2380DC26005D04A9 /* MovieVMTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
