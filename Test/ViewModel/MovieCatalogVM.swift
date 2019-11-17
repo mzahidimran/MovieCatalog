@@ -57,10 +57,10 @@ protocol MovieCatalogVMProtocol {
     var error: ImmutableObservable<Error?> { get }
     
     /**
-    Updates on every new network request
+    Updates on network activity to show loader
     */
     
-    var currentRequest: ImmutableObservable<NetworkRequest?> { get }
+    var networkActivity: ImmutableObservable<Bool> { get }
     
     /**
     Get videos list for page
@@ -131,8 +131,8 @@ class MovieCatalogVM: MovieCatalogVMProtocol {
     lazy var error: ImmutableObservable<Error?> = _error
     
     
-    private var _currentRequest: Observable<NetworkRequest?> = Observable<NetworkRequest?>(nil)
-    lazy var currentRequest: ImmutableObservable<NetworkRequest?> = _currentRequest
+    private var _networkActivity: Observable<Bool> = Observable<Bool>(false)
+    lazy var networkActivity: ImmutableObservable<Bool> = _networkActivity
     
     init(repository: MovieRepositoryProtocol = RemoteMovieRepository()) {
         self.repository = repository
@@ -150,8 +150,9 @@ class MovieCatalogVM: MovieCatalogVMProtocol {
     func load(page:Int) -> Void {
         
         self._error.value = nil
-        if _currentRequest.value == nil {
-            self._currentRequest.value = repository.getPopular(page: page) {[weak self] (result:Pageable<Movie>?, error) in
+        if _networkActivity.value == false {
+            self._networkActivity.value = true
+            repository.getPopular(page: page) {[weak self] (result:Pageable<Movie>?, error) in
                 if let result = result {
                     self?.throttleImages(movies: result.results)
                     self?.source.append(contentsOf: result.results)
@@ -162,7 +163,7 @@ class MovieCatalogVM: MovieCatalogVMProtocol {
                 else if let error = error {
                     self?._error.value = error
                 }
-                self?._currentRequest.value = nil
+                self?._networkActivity.value = false
             }
         }
     }

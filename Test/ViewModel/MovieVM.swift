@@ -76,7 +76,7 @@ protocol MovieVMProtocol {
     Updates whenever VM have network request going on
     */
     
-    var currentRequest: ImmutableObservable<NetworkRequest?> { get }
+    var networkActivity: ImmutableObservable<Bool> { get }
     
     /**
     Load movie details
@@ -123,8 +123,8 @@ class MovieVM: MovieVMProtocol {
     
     private let dateformatter = DateFormatter(withFormat: "dd.MM.yyyy", locale: "en_US")
     
-    private var _currentRequest: Observable<NetworkRequest?> = Observable<NetworkRequest?>(nil)
-    lazy var currentRequest: ImmutableObservable<NetworkRequest?> = _currentRequest
+    private var _networkActivity: Observable<Bool> = Observable<Bool>(false)
+    lazy var networkActivity: ImmutableObservable<Bool> = _networkActivity
     
     private var _overview:Observable<String> = Observable<String>("")
     lazy var overview: ImmutableObservable<String> = _overview
@@ -168,15 +168,16 @@ class MovieVM: MovieVMProtocol {
     
     func load(movieID:Int) -> Void {
         self._error.value = nil
-        if _currentRequest.value == nil {
-            self._currentRequest.value = repository.getMovie(id: movieID) {[weak self] (result:Movie?, error) in
+        if _networkActivity.value == false {
+            self._networkActivity.value = true
+            repository.getMovie(id: movieID) {[weak self] (result:Movie?, error) in
                 if let result = result {
                     self?.movie = result
                 }
                 else if let error = error {
                     self?._error.value = error
                 }
-                self?._currentRequest.value = nil
+                self?._networkActivity.value = false
             }
         }
     }
