@@ -35,10 +35,9 @@ protocol MovieRepositoryProtocol: RepositoryProtocol {
      
     - Parameter error: Error on API failure
 
-    - Returns: New network request refrence.
     */
     
-    func getPopular<T>(page: Int, completion: @escaping (_ response: Pageable<T>?, _ error: Error?) -> Void) -> NetworkRequest where T: MovieModelProtocol, T: Mappable
+    func getPopular<T>(page: Int, completion: @escaping (_ response: Pageable<T>?, _ error: Error?) -> Void) -> Void where T: MovieModelProtocol, T: Mappable
     
     /**
     Get movie detail for movie ID.
@@ -51,10 +50,9 @@ protocol MovieRepositoryProtocol: RepositoryProtocol {
      
     - Parameter error: Error on API failure
 
-    - Returns: New network request refrence.
     */
     
-    func getMovie<T>(id: Int, completion: @escaping (_ response: T?, _ error: Error?) -> Void) -> NetworkRequest  where T: MovieModelProtocol, T: Mappable
+    func getMovie<T>(id: Int, completion: @escaping (_ response: T?, _ error: Error?) -> Void) -> Void  where T: MovieModelProtocol, T: Mappable
     
     /**
     Get videos list available for movie ID.
@@ -67,8 +65,7 @@ protocol MovieRepositoryProtocol: RepositoryProtocol {
      
     - Parameter error: Error on API failure
 
-    - Returns: New network request refrence.
     */
     
-    func getVideos(id: Int, completion: @escaping (_ response: VideoResponse?, _ error: Error?) -> Void) -> NetworkRequest
+    func getVideos(id: Int, completion: @escaping (_ response: VideoResponse?, _ error: Error?) -> Void) -> Void
 }

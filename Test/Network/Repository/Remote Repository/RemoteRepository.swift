@@ -33,8 +33,8 @@ class RemoteRepository: RepositoryProtocol {
     - Returns: New network request refrence.
     */
     
-    func request<T: Mappable>(requestConverter: RequestConverter, completion:@escaping (_ response: T?, _ error: Error?) -> Void) -> NetworkRequest {
-        return Alamofire.request(requestConverter).validate().responseObject { (response:DataResponse<T>) in
+    func request<T: Mappable>(requestConverter: RequestConverter, completion:@escaping (_ response: T?, _ error: Error?) -> Void) -> Void {
+        Alamofire.request(requestConverter).validate().responseObject { (response:DataResponse<T>) in
             switch response.result {
             case .success(let value):
                 print(value.toJSONString())

@@ -39,8 +39,8 @@ class MovieCatalogViewController: UIViewController {
             }
         }.add(to: &disposal)
         
-        model.currentRequest.observe {[weak self] (value, nil) in
-            if let _ = value {
+        model.networkActivity.observe {[weak self] (value, nil) in
+            if value == true {
                 self?.view.showLinearHud(Double(self?.view.layoutMargins.top ?? 0))
             }
             else {
