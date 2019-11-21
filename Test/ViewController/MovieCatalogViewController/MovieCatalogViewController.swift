@@ -34,9 +34,7 @@ class MovieCatalogViewController: UIViewController {
     func addObserver() -> Void {
         
         model.moviesUpdated.observe {[weak self] (value, _ ) in
-            DispatchQueue.main.async {
-                self?.tableView.reloadData()
-            }
+            self?.tableView.reloadData()
         }.add(to: &disposal)
         
         model.networkActivity.observe {[weak self] (value, nil) in

@@ -65,27 +65,27 @@ class MovieDetailViewController: UIViewController {
     
     func addObserver() -> Void {
         
-        model.title.observe { (newValue, oldValue) in
-            self.titleLabel.text = newValue
+        model.title.observe {[weak self]  (newValue, oldValue) in
+            self?.titleLabel.text = newValue
         }.add(to: &disposal)
         
-        model.bannerURl.observe { (newValue, oldValue) in
+        model.bannerURl.observe {[weak self]  (newValue, oldValue) in
             if let bannerURL = newValue
             {
-                self.bannerImageView.af_setImage(withURL: bannerURL, placeholderImage: #imageLiteral(resourceName: "placeholder"))
+                self?.bannerImageView.af_setImage(withURL: bannerURL, placeholderImage: #imageLiteral(resourceName: "placeholder"))
             }
         }.add(to: &disposal)
         
-        model.overview.observe { (newValue, oldValue) in
-            self.overviewLabel.text = newValue
+        model.overview.observe {[weak self]  (newValue, oldValue) in
+            self?.overviewLabel.text = newValue
         }.add(to: &disposal)
         
-        model.releaseDate.observe { (newValue, oldValue) in
-            self.releaseDateLabel.text = newValue
+        model.releaseDate.observe {[weak self]  (newValue, oldValue) in
+            self?.releaseDateLabel.text = newValue
         }.add(to: &disposal)
         
-        model.genre.observe { (newValue, oldValue) in
-            self.genreLabel.text = newValue
+        model.genre.observe {[weak self]  (newValue, oldValue) in
+            self?.genreLabel.text = newValue
         }.add(to: &disposal)
         
         model.hasDataUpdates.observe {[weak self] (value, _ ) in
